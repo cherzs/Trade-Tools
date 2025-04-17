@@ -18,133 +18,162 @@ st.set_page_config(
     page_title="Trade Tools by Cherzs",
     page_icon="📈",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://github.com/cherzs',
+        'Report a bug': 'https://github.com/cherzs',
+        'About': 'Trade Tools - Professional trading calculator and journal by Cherzs'
+    }
 )
 
 # Initialize trade journal
 trade_journal = TradeJournal()
 
+# Define color schemes for light and dark modes
+if st.get_option("theme.base") == "light":
+    PRIMARY_COLOR = "#4f8bf9"
+    SECONDARY_COLOR = "#9d65ff"
+    BG_COLOR = "#ffffff"
+    TEXT_COLOR = "#333333"
+    CARD_BG = "#f8f9fa"
+    CARD_BORDER = "#4f8bf9"
+    WIN_COLOR = "#28a745"
+    LOSS_COLOR = "#dc3545"
+    CHART_BG = "rgba(248, 249, 250, 0.3)"
+    SIDEBAR_BG = "#f8f9fa"
+else:
+    PRIMARY_COLOR = "#4f8bf9"
+    SECONDARY_COLOR = "#9d65ff"
+    BG_COLOR = "#1e1e2e"
+    TEXT_COLOR = "#e0e0e0"
+    CARD_BG = "#2a2a3c"
+    CARD_BORDER = "#4f8bf9"
+    WIN_COLOR = "#2ecc71"
+    LOSS_COLOR = "#e74c3c"
+    CHART_BG = "rgba(42, 42, 60, 0.3)"
+    SIDEBAR_BG = "#2a2a3c"
+
 # Add CSS for styling
-st.markdown("""
+st.markdown(f"""
 <style>
     /* Main container styling */
-    .main {
-        background-color: #1e1e2e;
-        color: #e0e0e0;
-    }
+    .main {{
+        background-color: {BG_COLOR};
+        color: {TEXT_COLOR};
+    }}
     
     /* Main header */
-    .main-header {
+    .main-header {{
         font-size: 2.8rem;
         margin-bottom: 1.5rem;
         font-weight: 700;
-        background: linear-gradient(90deg, #4f8bf9, #9d65ff);
+        background: linear-gradient(90deg, {PRIMARY_COLOR}, {SECONDARY_COLOR});
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         text-align: center;
-    }
+    }}
     
     /* Section headers */
-    .section-header {
+    .section-header {{
         font-size: 2rem;
         margin-top: 2rem;
         margin-bottom: 1.5rem;
         padding-bottom: 0.5rem;
-        border-bottom: 2px solid #4f8bf9;
-        color: #ffffff;
+        border-bottom: 2px solid {PRIMARY_COLOR};
+        color: {PRIMARY_COLOR};
         font-weight: 600;
-    }
+    }}
     
     /* Metric cards */
-    .metric-card {
-        background-color: #2a2a3c;
+    .metric-card {{
+        background-color: {CARD_BG};
         border-radius: 0.8rem;
         padding: 1.2rem;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         text-align: center;
-        border-left: 4px solid #4f8bf9;
+        border-left: 4px solid {CARD_BORDER};
         transition: transform 0.3s ease;
-    }
+    }}
     
-    .metric-card:hover {
+    .metric-card:hover {{
         transform: translateY(-5px);
-    }
+    }}
     
-    .metric-value {
+    .metric-value {{
         font-size: 1.8rem;
         font-weight: bold;
         margin-bottom: 0.5rem;
-    }
+    }}
     
-    .metric-label {
+    .metric-label {{
         font-size: 0.9rem;
-        color: #a8a8b3;
+        color: {TEXT_COLOR}90;
         text-transform: uppercase;
         letter-spacing: 1px;
-    }
+    }}
     
     /* Win/Loss colors */
-    .win {
-        color: #2ecc71;
-    }
+    .win {{
+        color: {WIN_COLOR};
+    }}
     
-    .loss {
-        color: #e74c3c;
-    }
+    .loss {{
+        color: {LOSS_COLOR};
+    }}
     
     /* Button styling */
-    .stButton>button {
-        background-color: #4f8bf9;
+    .stButton>button {{
+        background-color: {PRIMARY_COLOR};
         color: white;
         border-radius: 0.5rem;
         border: none;
         padding: 0.5rem 1rem;
         font-weight: 600;
         transition: all 0.3s ease;
-    }
+    }}
     
-    .stButton>button:hover {
-        background-color: #3a78e7;
+    .stButton>button:hover {{
+        background-color: {PRIMARY_COLOR}dd;
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
+    }}
     
     /* Input fields */
-    .stNumberInput>div>div>input {
+    .stNumberInput>div>div>input {{
         border-radius: 0.5rem;
-    }
+    }}
     
     /* Footer brand */
-    .footer-brand {
+    .footer-brand {{
         text-align: center;
         margin-top: 2rem;
         padding: 1rem;
         font-size: 1rem;
-        color: #a8a8b3;
-    }
+        color: {TEXT_COLOR}90;
+    }}
     
-    .brand-name {
+    .brand-name {{
         font-weight: 700;
-        background: linear-gradient(90deg, #4f8bf9, #9d65ff);
+        background: linear-gradient(90deg, {PRIMARY_COLOR}, {SECONDARY_COLOR});
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-    }
+    }}
     
-    /* Sidebar styling */
-    .css-6qob1r {
-        background-color: #2a2a3c;
-    }
-    
-    /* Table styling */
-    .stDataFrame div[data-testid="stDataFrame"] {
+    /* Data frame styling */
+    .stDataFrame div[data-testid="stDataFrame"] {{
         border-radius: 0.8rem;
         overflow: hidden;
-    }
+    }}
+    
+    /* Theme integration */
+    .stApp {{
+        background-color: {BG_COLOR};
+    }}
 </style>
 """, unsafe_allow_html=True)
 
 # Sidebar navigation with branded header
-st.sidebar.markdown('<div style="text-align:center; margin-bottom:30px;"><h1 style="color:#4f8bf9;">📈 Trade Tools</h1><p style="color:#9d65ff; font-weight:bold;">by Cherzs</p></div>', unsafe_allow_html=True)
+st.sidebar.markdown(f'<div style="text-align:center; margin-bottom:30px;"><h1 style="color:{PRIMARY_COLOR};">📈 Trade Tools</h1><p style="color:{SECONDARY_COLOR}; font-weight:bold;">by Cherzs</p></div>', unsafe_allow_html=True)
 
 app_mode = st.sidebar.radio(
     "Pilih Fitur",
@@ -152,11 +181,11 @@ app_mode = st.sidebar.radio(
 )
 
 # Add sidebar footer with branding
-st.sidebar.markdown("""
+st.sidebar.markdown(f"""
 ---
 <div style="text-align:center; padding:10px;">
     <img src="https://img.icons8.com/bubbles/50/trading.png" width="40">
-    <p style="font-size:0.8rem; color:#a8a8b3;">© 2024 Cherzs Trading Tools</p>
+    <p style="font-size:0.8rem; color:{TEXT_COLOR}90;">© 2024 Cherzs Trading Tools</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -252,13 +281,13 @@ def show_risk_calculator():
                 fig.add_trace(go.Scatter(
                     x=[0, 1], y=[stop_loss, stop_loss],
                     mode='lines', name='Stop Loss',
-                    line=dict(color='#e74c3c', width=3)
+                    line=dict(color=LOSS_COLOR, width=3)
                 ))
                 
                 fig.add_trace(go.Scatter(
                     x=[0, 1], y=[take_profit, take_profit],
                     mode='lines', name='Take Profit',
-                    line=dict(color='#2ecc71', width=3)
+                    line=dict(color=WIN_COLOR, width=3)
                 ))
                 
                 # Update layout
@@ -275,9 +304,9 @@ def show_risk_calculator():
                     ),
                     height=400,
                     margin=dict(l=20, r=20, t=40, b=20),
-                    paper_bgcolor='rgba(42, 42, 60, 0.3)',
-                    plot_bgcolor='rgba(42, 42, 60, 0.3)',
-                    font=dict(color='#e0e0e0'),
+                    paper_bgcolor=CHART_BG,
+                    plot_bgcolor=CHART_BG,
+                    font=dict(color=TEXT_COLOR),
                     legend=dict(
                         orientation="h",
                         yanchor="bottom",
@@ -375,15 +404,15 @@ def show_trade_journal():
                     names=['Wins', 'Losses'],
                     values=[stats['win_count'], stats['loss_count']],
                     color=['Wins', 'Losses'],
-                    color_discrete_map={'Wins': '#2ecc71', 'Losses': '#e74c3c'},
+                    color_discrete_map={'Wins': WIN_COLOR, 'Losses': LOSS_COLOR},
                     title="Win/Loss Distribution"
                 )
                 fig.update_traces(textposition='inside', textinfo='percent+label')
                 fig.update_layout(
                     margin=dict(l=20, r=20, t=40, b=20),
-                    paper_bgcolor='rgba(42, 42, 60, 0.3)',
-                    plot_bgcolor='rgba(42, 42, 60, 0.3)',
-                    font=dict(color='#e0e0e0')
+                    paper_bgcolor=CHART_BG,
+                    plot_bgcolor=CHART_BG,
+                    font=dict(color=TEXT_COLOR)
                 )
                 st.plotly_chart(fig, use_container_width=True)
             
@@ -498,9 +527,9 @@ def show_profit_projection():
             fig.update_layout(
                 height=400,
                 margin=dict(l=20, r=20, t=40, b=20),
-                paper_bgcolor='rgba(42, 42, 60, 0.3)',
-                plot_bgcolor='rgba(42, 42, 60, 0.3)',
-                font=dict(color='#e0e0e0')
+                paper_bgcolor=CHART_BG,
+                plot_bgcolor=CHART_BG,
+                font=dict(color=TEXT_COLOR)
             )
             
             st.plotly_chart(fig, use_container_width=True)
@@ -538,9 +567,18 @@ elif app_mode == "Expected Profit Projection":
 
 # Footer with branding
 st.markdown("---")
-st.markdown("""
+st.markdown(f"""
 <div class="footer-brand">
     <p><strong>Trade Tools</strong> - Helping traders manage risk, track performance, and project profits.</p>
     <p>Made with ❤️ by <span class="brand-name">Cherzs</span></p>
 </div>
 """, unsafe_allow_html=True)
+
+# Add theme selector hint
+with st.expander("Theme Settings"):
+    st.write("You can change the app theme by clicking the ⚙️ icon at the top right corner and selecting your preferred theme.")
+    st.write("This app will automatically adapt its colors to match your chosen theme.")
+    
+    # Get current theme
+    current_theme = "Light" if st.get_option("theme.base") == "light" else "Dark"
+    st.write(f"Current theme: **{current_theme}**")
