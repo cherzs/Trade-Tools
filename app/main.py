@@ -29,8 +29,18 @@ st.set_page_config(
 # Initialize trade journal
 trade_journal = TradeJournal()
 
+# Function to determine if dark mode is active
+def is_dark_theme():
+    # Check for current theme setting - default to dark
+    try:
+        return st.get_option("theme.base") == "dark"
+    except:
+        # Fallback check using CSS media query
+        return True
+
 # Define color schemes for light and dark modes
-if st.get_option("theme.base") == "light":
+if not is_dark_theme():
+    # Light Theme
     PRIMARY_COLOR = "#4f8bf9"
     SECONDARY_COLOR = "#9d65ff"
     BG_COLOR = "#ffffff"
@@ -40,8 +50,9 @@ if st.get_option("theme.base") == "light":
     WIN_COLOR = "#28a745"
     LOSS_COLOR = "#dc3545"
     CHART_BG = "rgba(248, 249, 250, 0.3)"
-    SIDEBAR_BG = "#f8f9fa"
+    SECTION_COLOR = "#4f8bf9"
 else:
+    # Dark Theme
     PRIMARY_COLOR = "#4f8bf9"
     SECONDARY_COLOR = "#9d65ff"
     BG_COLOR = "#1e1e2e"
@@ -51,14 +62,14 @@ else:
     WIN_COLOR = "#2ecc71"
     LOSS_COLOR = "#e74c3c"
     CHART_BG = "rgba(42, 42, 60, 0.3)"
-    SIDEBAR_BG = "#2a2a3c"
+    SECTION_COLOR = "#ffffff"
 
 # Add CSS for styling
 st.markdown(f"""
 <style>
     /* Main container styling */
     .main {{
-        background-color: {BG_COLOR};
+        background-color: {BG_COLOR} !important;
         color: {TEXT_COLOR};
     }}
     
@@ -80,7 +91,7 @@ st.markdown(f"""
         margin-bottom: 1.5rem;
         padding-bottom: 0.5rem;
         border-bottom: 2px solid {PRIMARY_COLOR};
-        color: {PRIMARY_COLOR};
+        color: {SECTION_COLOR};
         font-weight: 600;
     }}
     
@@ -165,9 +176,35 @@ st.markdown(f"""
         overflow: hidden;
     }}
     
-    /* Theme integration */
+    /* Theme integration - Force app background */
     .stApp {{
-        background-color: {BG_COLOR};
+        background-color: {BG_COLOR} !important;
+    }}
+    
+    .st-emotion-cache-ue6h4q {{
+        background-color: {BG_COLOR} !important;
+    }}
+    
+    /* Fix for sidebar */
+    section[data-testid="stSidebar"] {{
+        background-color: {CARD_BG};
+    }}
+    
+    /* Fix for dark/light mode info boxes */
+    .stAlert {{
+        background-color: {CARD_BG} !important;
+        color: {TEXT_COLOR} !important;
+    }}
+    
+    /* Fix for expander */
+    .streamlit-expanderHeader {{
+        color: {TEXT_COLOR} !important;
+    }}
+    
+    /* Ensure dark/light theme applied to inputs and select boxes */
+    .stTextInput input, .stNumberInput input, .stSelectbox select {{
+        color: {TEXT_COLOR} !important;
+        background-color: {CARD_BG} !important;
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -448,7 +485,7 @@ def show_trade_journal():
             if st.button("Clear Journal", type="secondary"):
                 if trade_journal.clear_trades():
                     st.success("Journal cleared successfully!")
-                    st.experimental_rerun()
+                    st.rerun()  # Updated from experimental_rerun
                 else:
                     st.error("Failed to clear journal.")
         else:
@@ -576,9 +613,12 @@ st.markdown(f"""
 
 # Add theme selector hint
 with st.expander("Theme Settings"):
-    st.write("You can change the app theme by clicking the ⚙️ icon at the top right corner and selecting your preferred theme.")
-    st.write("This app will automatically adapt its colors to match your chosen theme.")
+    current_theme = "Light" if not is_dark_theme() else "Dark"
+    st.info(f"Current app theme: **{current_theme}**")
     
-    # Get current theme
-    current_theme = "Light" if st.get_option("theme.base") == "light" else "Dark"
-    st.write(f"Current theme: **{current_theme}**")
+    st.write("You can change the app theme by clicking the ⚙️ icon at the top right corner and selecting your preferred theme.")
+    st.write("The app will automatically adapt its colors to match your chosen theme.")
+    
+    # Toggle button for manual theme override
+    if st.button("Refresh Theme", help="Click to refresh if theme colors don't match your selected theme"):
+        st.rerun()
