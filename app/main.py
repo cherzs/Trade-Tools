@@ -15,7 +15,7 @@ from data_handler import TradeJournal
 
 # Set page config
 st.set_page_config(
-    page_title="Trade Tools",
+    page_title="Trade Tools by Cherzs",
     page_icon="📈",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -27,47 +27,138 @@ trade_journal = TradeJournal()
 # Add CSS for styling
 st.markdown("""
 <style>
+    /* Main container styling */
+    .main {
+        background-color: #1e1e2e;
+        color: #e0e0e0;
+    }
+    
+    /* Main header */
     .main-header {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-    }
-    .section-header {
-        font-size: 1.8rem;
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid #e0e0e0;
-    }
-    .metric-card {
-        background-color: #f8f9fa;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        font-size: 2.8rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, #4f8bf9, #9d65ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         text-align: center;
     }
-    .metric-value {
-        font-size: 1.5rem;
-        font-weight: bold;
+    
+    /* Section headers */
+    .section-header {
+        font-size: 2rem;
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #4f8bf9;
+        color: #ffffff;
+        font-weight: 600;
     }
+    
+    /* Metric cards */
+    .metric-card {
+        background-color: #2a2a3c;
+        border-radius: 0.8rem;
+        padding: 1.2rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        border-left: 4px solid #4f8bf9;
+        transition: transform 0.3s ease;
+    }
+    
+    .metric-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .metric-value {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    
     .metric-label {
         font-size: 0.9rem;
-        color: #6c757d;
+        color: #a8a8b3;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
+    
+    /* Win/Loss colors */
     .win {
-        color: #28a745;
+        color: #2ecc71;
     }
+    
     .loss {
-        color: #dc3545;
+        color: #e74c3c;
+    }
+    
+    /* Button styling */
+    .stButton>button {
+        background-color: #4f8bf9;
+        color: white;
+        border-radius: 0.5rem;
+        border: none;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .stButton>button:hover {
+        background-color: #3a78e7;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Input fields */
+    .stNumberInput>div>div>input {
+        border-radius: 0.5rem;
+    }
+    
+    /* Footer brand */
+    .footer-brand {
+        text-align: center;
+        margin-top: 2rem;
+        padding: 1rem;
+        font-size: 1rem;
+        color: #a8a8b3;
+    }
+    
+    .brand-name {
+        font-weight: 700;
+        background: linear-gradient(90deg, #4f8bf9, #9d65ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    /* Sidebar styling */
+    .css-6qob1r {
+        background-color: #2a2a3c;
+    }
+    
+    /* Table styling */
+    .stDataFrame div[data-testid="stDataFrame"] {
+        border-radius: 0.8rem;
+        overflow: hidden;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Sidebar navigation
-st.sidebar.markdown("# Trade Tools 📈")
+# Sidebar navigation with branded header
+st.sidebar.markdown('<div style="text-align:center; margin-bottom:30px;"><h1 style="color:#4f8bf9;">📈 Trade Tools</h1><p style="color:#9d65ff; font-weight:bold;">by Cherzs</p></div>', unsafe_allow_html=True)
+
 app_mode = st.sidebar.radio(
     "Pilih Fitur",
     ["Risk & Position Size Calculator", "Manual Trade Journal", "Expected Profit Projection"]
 )
+
+# Add sidebar footer with branding
+st.sidebar.markdown("""
+---
+<div style="text-align:center; padding:10px;">
+    <img src="https://img.icons8.com/bubbles/50/trading.png" width="40">
+    <p style="font-size:0.8rem; color:#a8a8b3;">© 2024 Cherzs Trading Tools</p>
+</div>
+""", unsafe_allow_html=True)
 
 # Main app header
 st.markdown("<h1 class='main-header'>Trade Tools</h1>", unsafe_allow_html=True)
@@ -155,19 +246,19 @@ def show_risk_calculator():
                 fig.add_trace(go.Scatter(
                     x=[0, 1], y=[entry_price, entry_price],
                     mode='lines', name='Entry',
-                    line=dict(color='blue', width=2)
+                    line=dict(color='#3498db', width=3)
                 ))
                 
                 fig.add_trace(go.Scatter(
                     x=[0, 1], y=[stop_loss, stop_loss],
                     mode='lines', name='Stop Loss',
-                    line=dict(color='red', width=2)
+                    line=dict(color='#e74c3c', width=3)
                 ))
                 
                 fig.add_trace(go.Scatter(
                     x=[0, 1], y=[take_profit, take_profit],
                     mode='lines', name='Take Profit',
-                    line=dict(color='green', width=2)
+                    line=dict(color='#2ecc71', width=3)
                 ))
                 
                 # Update layout
@@ -183,7 +274,17 @@ def show_risk_calculator():
                         range=[y_min, y_max]
                     ),
                     height=400,
-                    margin=dict(l=0, r=0, t=40, b=0)
+                    margin=dict(l=20, r=20, t=40, b=20),
+                    paper_bgcolor='rgba(42, 42, 60, 0.3)',
+                    plot_bgcolor='rgba(42, 42, 60, 0.3)',
+                    font=dict(color='#e0e0e0'),
+                    legend=dict(
+                        orientation="h",
+                        yanchor="bottom",
+                        y=1.02,
+                        xanchor="right",
+                        x=1
+                    )
                 )
                 
                 st.plotly_chart(fig, use_container_width=True)
@@ -274,10 +375,16 @@ def show_trade_journal():
                     names=['Wins', 'Losses'],
                     values=[stats['win_count'], stats['loss_count']],
                     color=['Wins', 'Losses'],
-                    color_discrete_map={'Wins': '#28a745', 'Losses': '#dc3545'},
+                    color_discrete_map={'Wins': '#2ecc71', 'Losses': '#e74c3c'},
                     title="Win/Loss Distribution"
                 )
                 fig.update_traces(textposition='inside', textinfo='percent+label')
+                fig.update_layout(
+                    margin=dict(l=20, r=20, t=40, b=20),
+                    paper_bgcolor='rgba(42, 42, 60, 0.3)',
+                    plot_bgcolor='rgba(42, 42, 60, 0.3)',
+                    font=dict(color='#e0e0e0')
+                )
                 st.plotly_chart(fig, use_container_width=True)
             
             # Display trade history
@@ -379,7 +486,7 @@ def show_profit_projection():
                 x="Number of Trades",
                 y="Projected Profit (%)",
                 color="Projected Profit (%)",
-                color_continuous_scale=["red", "#ffcc00", "green"],
+                color_continuous_scale=["#e74c3c", "#f39c12", "#2ecc71"],
                 text="Projected Profit (%)"
             )
             
@@ -390,7 +497,10 @@ def show_profit_projection():
             
             fig.update_layout(
                 height=400,
-                margin=dict(l=0, r=0, t=10, b=0)
+                margin=dict(l=20, r=20, t=40, b=20),
+                paper_bgcolor='rgba(42, 42, 60, 0.3)',
+                plot_bgcolor='rgba(42, 42, 60, 0.3)',
+                font=dict(color='#e0e0e0')
             )
             
             st.plotly_chart(fig, use_container_width=True)
@@ -426,6 +536,11 @@ elif app_mode == "Manual Trade Journal":
 elif app_mode == "Expected Profit Projection":
     show_profit_projection()
 
-# Footer
+# Footer with branding
 st.markdown("---")
-st.markdown("**Trade Tools** - Developed to help traders manage risk, track performance, and project profits.") 
+st.markdown("""
+<div class="footer-brand">
+    <p><strong>Trade Tools</strong> - Helping traders manage risk, track performance, and project profits.</p>
+    <p>Made with ❤️ by <span class="brand-name">Cherzs</span></p>
+</div>
+""", unsafe_allow_html=True)
