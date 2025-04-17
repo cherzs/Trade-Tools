@@ -13,11 +13,14 @@ from utils import (calculate_position_size, calculate_risk_reward_ratio,
                   calculate_expected_value, calculate_trade_statistics)
 from data_handler import TradeJournal
 
+# Configure Streamlit's wide mode directly (hide from settings)
+st._config.set_option("ui.contentWidth", "wide")
+
 # Set page config
 st.set_page_config(
     page_title="Trade Tools by Cherzs",
     page_icon="📈",
-    layout="wide",
+    # layout="wide", # Removed to hide the wide mode toggle
     initial_sidebar_state="expanded",
     menu_items={
         'Get Help': 'https://github.com/cherzs',
@@ -64,9 +67,18 @@ else:
     CHART_BG = "rgba(42, 42, 60, 0.3)"
     SECTION_COLOR = "#ffffff"
 
-# Add CSS for styling
+# Add CSS for styling - ensure full width
 st.markdown(f"""
 <style>
+    /* Force full width for the app */
+    .block-container {{
+        max-width: 100%;
+        padding-top: 1rem;
+        padding-right: 1rem;
+        padding-left: 1rem;
+        padding-bottom: 1rem;
+    }}
+
     /* Main container styling */
     .main {{
         background-color: {BG_COLOR} !important;
